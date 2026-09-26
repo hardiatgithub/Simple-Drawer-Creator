@@ -176,85 +176,89 @@
 
   </div>
 
-  <!-- ── Bottom Type: Grooved Options ──────────────────────────────────── -->
-  <!-- Only shown when Bottom Type = Grooved. Its own full-width section (like
-       Side Top Overhang below) instead of squeezed into the narrow Bottom Type
-       column, so there's room for the fit-clearance sketch.      -- by Claude 9/21/2026 -->
+  <!-- ── Bottom Type: Grooved Options (includes Side Overhang) ───────────
+       Only shown when Bottom Type = Grooved. Chamfer Angle/Height (formerly
+       their own separate "Side Overhang" section) now live here too, at the
+       user's request, sharing one combined sketch with the groove/rabbet
+       fields. Tradeoff accepted by the user: Side Overhang now requires
+       Bottom Type = Grooved (it used to be usable with any Bottom Type,
+       gated only on Lid Type = None - that Lid Type check still happens on
+       the Lua side via ValidateEndHeight, so picking a Lid with Grooved
+       still just reports the same clear error instead of silently doing
+       nothing).                                              -- by Claude 9/26/2026 -->
   <div class="section-header" id="showHideGrooveSectionHeader" style="display: none;">Bottom Type: Grooved Options</div>
   <div class="card" id="showHideGrooveOptions" style="display: none;">
     <div class="card-body clearfix">
-      <div style="font-size: 11px; opacity: 0.8; margin-bottom: 8px;">Slide-in bottom: grooved into Side 1, Side 2 &amp; End 1 (Box joints only - with Dovetail joints, End 1's groove is skipped, since it would land inside the angled dovetail tails there). End 2 is shortened to the top of the groove, so the panel can always slide in/out there, even after glue-up. Uncheck "Bottom" under Faces To Machine below to keep the groove but skip cutting the panel itself (e.g. to slide in your own material).</div>
+      <div style="font-size: 11px; opacity: 0.8; margin-bottom: 8px;">Slide-in bottom: grooved into Side 1, Side 2 &amp; End 1 (Box joints only - with Dovetail joints, End 1's groove is skipped, since it would land inside the angled dovetail tails there). End 2 is shortened to the top of the groove, so the panel can always slide in/out there, even after glue-up. Uncheck "Bottom" under Faces To Machine below to keep the groove but skip cutting the panel itself (e.g. to slide in your own material). Also includes Side Overhang: Front &amp; Back (End 1 &amp; End 2) can each get their own height below the box height, tapered by a chamfer - only with Lid Type = None.</div>
 
-      <div class="clearfix" style="margin-bottom: 6px;">
-        <div class="field-row" style="float: left; width: 230px; margin-bottom: 0; margin-right: 20px;" title="Distance from the outer bottom edge of the walls up to the TOP of the groove that captures the bottom panel (must be at least the groove width)">
-          <label for="BottomGrooveOffsetField">Groove offset</label>
-          <input type="number" step="any" id="BottomGrooveOffsetField" placeholder="Groove offset" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
-        </div>
-        <div class="field-row" style="float: left; width: 230px; margin-bottom: 0;" title="Width of the groove slot (vertical height of the dado), independent of material thickness - set this to the actual thickness of the bottom panel you'll slide in, e.g. 4mm for a thin plywood/hardboard bottom. If 'Same material' is checked, set this to whatever width you want the rabbeted edge to seat at (can be smaller than the material thickness).">
-          <label for="BottomGrooveWidthField">Groove width</label>
-          <input type="number" step="any" id="BottomGrooveWidthField" placeholder="Groove width" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
-        </div>
-      </div>
-      <div class="clearfix" style="margin-bottom: 10px;">
-        <div class="field-row" style="float: left; width: 230px; margin-bottom: 0;" title="How deep the groove is plowed into Side 1, Side 2 and End 1 (must be less than the material thickness)">
-          <label for="BottomGrooveDepthField">Groove depth</label>
-          <input type="number" step="any" id="BottomGrooveDepthField" placeholder="Groove depth" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
-        </div>
+      <div class="clearfix" style="margin-bottom: 12px;">
+        <img src="Images/GroovedOverhangSketch.png" alt="Sketch: Side, Chamfer Angle, Height, Groove offset, Groove width, Groove depth, rabbet correction, Bottom Clearance" style="max-width: 100%; height: auto;" />
       </div>
 
       <div class="clearfix">
-        <div style="float: left; width: 260px; margin-right: 20px;">
-          <img src="Images/GrooveSketch.png" alt="Groove fit sketch: Oberkante Boden / groove offset, Luft seitlich / Groove clearance, Falz Luft / rabbet correction" width="260" height="149" />
+        <!-- Left: Chamfer Angle + Height (Front/Back) - the former Side Overhang fields -->
+        <div style="float: left; width: 370px; margin-right: 20px;">
+          <div style="font-size: 12px; font-weight: bold; margin-bottom: 4px;">Chamfer Angle</div>
+          <div class="clearfix" style="margin-bottom: 8px;">
+            <div class="field-row" style="float: left; width: 170px; margin-right: 20px; margin-bottom: 0;" title="Angle of Front (End 1)'s own chamfer, measured from vertical (degrees). 45 = classic symmetric chamfer; smaller = steeper/shorter, bigger = shallower/longer. Its horizontal run is worked out from this angle and the actual overhang.">
+              <label for="End1ChamferAngleField">Front</label>
+              <input type="number" step="any" min="1" max="89" id="End1ChamferAngleField" placeholder="Degrees" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
+            </div>
+            <div class="field-row" style="float: left; width: 170px; margin-bottom: 0;" title="Angle of Back (End 2)'s own chamfer, measured from vertical (degrees), independently of Front's. 45 = classic symmetric chamfer; smaller = steeper/shorter, bigger = shallower/longer.">
+              <label for="End2ChamferAngleField">Back</label>
+              <input type="number" step="any" min="1" max="89" id="End2ChamferAngleField" placeholder="Degrees" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
+            </div>
+          </div>
+
+          <div style="font-size: 12px; font-weight: bold; margin-bottom: 4px;">Height</div>
+          <div class="clearfix" style="margin-bottom: 6px;">
+            <div class="field-row" style="float: left; width: 170px; margin-right: 20px; margin-bottom: 0;" title="Height of Front (End 1). Must be less than or equal to the box height - set it lower to create the overhang on that side. Defaults to the box height (= no overhang).">
+              <label for="End1HeightField">Front</label>
+              <input type="number" step="any" id="End1HeightField" placeholder="End height" oninput="onSideOverhangFieldsChanged()" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
+            </div>
+            <div class="field-row" style="float: left; width: 170px; margin-bottom: 0;" title="Height of Back (End 2). Must be less than or equal to the box height - set it lower to create the overhang on that side. Defaults to the box height (= no overhang).">
+              <label for="End2HeightField">Back</label>
+              <input type="number" step="any" id="End2HeightField" placeholder="End height" oninput="onSideOverhangFieldsChanged()" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
+            </div>
+          </div>
+          <div style="font-size: 11px; opacity: 0.8; min-height: 14px;" id="SideOverhangComputedText"></div>
         </div>
+
+        <!-- Right: Groove offset/width/depth, Bottom same material, Bottom Clearance, Rabbet correction -->
         <div style="overflow: hidden;">
+          <div class="clearfix" style="margin-bottom: 8px;">
+            <div class="field-row" style="float: left; width: 170px; margin-right: 20px; margin-bottom: 0;" title="Distance from the outer bottom edge of the walls up to the TOP of the groove that captures the bottom panel (must be at least the groove width)">
+              <label for="BottomGrooveOffsetField">Groove offset</label>
+              <input type="number" step="any" id="BottomGrooveOffsetField" placeholder="Groove offset" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
+            </div>
+            <div class="field-row" style="float: left; width: 170px; margin-bottom: 0;" title="Width of the groove slot (vertical height of the dado), independent of material thickness - set this to the actual thickness of the bottom panel you'll slide in, e.g. 4mm for a thin plywood/hardboard bottom. If 'Same material' is checked, set this to whatever width you want the rabbeted edge to seat at (can be smaller than the material thickness).">
+              <label for="BottomGrooveWidthField">Groove width</label>
+              <input type="number" step="any" id="BottomGrooveWidthField" placeholder="Groove width" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
+            </div>
+          </div>
+          <div class="clearfix" style="margin-bottom: 10px;">
+            <div class="field-row" style="float: left; width: 170px; margin-bottom: 0;" title="How deep the groove is plowed into Side 1, Side 2 and End 1 (must be less than the material thickness)">
+              <label for="BottomGrooveDepthField">Groove depth</label>
+              <input type="number" step="any" id="BottomGrooveDepthField" placeholder="Groove depth" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
+            </div>
+          </div>
+
           <div class="checkbox-row" title="Cut the bottom panel from the same (full) material thickness as the walls. A rabbet (Falz) is then milled along the panel's Side 1, Side 2 and End 1 edges, down to the groove width, so it still seats in the (narrower) groove. End 2's edge stays full thickness, since the panel is slid in from that opening.">
             <input type="checkbox" id="BottomSameMaterial"/>
-            <label for="BottomSameMaterial">Same material (rabbet 3 sides)</label>
+            <label for="BottomSameMaterial">Bottom same material (rabbet 3 sides)</label>
           </div>
           <div class="clearfix" style="margin-top: 6px;">
-            <div class="field-row" style="float: left; width: 230px; margin-right: 20px; margin-bottom: 0;" title="'Luft seitlich' - clearance subtracted from how far the panel reaches into each of the 3 grooves (Side 1, Side 2, End 1), for an easier slide fit. Only used when 'Same material' is checked.">
-              <label for="BottomGrooveClearanceField">Groove clearance</label>
-              <input type="number" step="any" id="BottomGrooveClearanceField" placeholder="Luft" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
+            <div class="field-row" style="float: left; width: 170px; margin-right: 20px; margin-bottom: 0;" title="'Luft seitlich' - clearance subtracted from how far the panel reaches into each of the 3 grooves (Side 1, Side 2, End 1), for an easier slide fit. Only used when 'Same material' is checked.">
+              <label for="BottomGrooveClearanceField">Bottom Clearance</label>
+              <input type="number" step="any" id="BottomGrooveClearanceField" placeholder="Clearance" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
             </div>
-            <div class="field-row" style="float: left; width: 230px; margin-bottom: 0;" title="'Falz Luft' - fine-tune correction added to the computed rabbet depth (material thickness minus groove width), e.g. a small positive value for a looser fit, negative for tighter. Only used when 'Same material' is checked.">
+            <div class="field-row" style="float: left; width: 170px; margin-bottom: 0;" title="'Falz Luft' - fine-tune correction added to the computed rabbet depth (material thickness minus groove width), e.g. a small positive value for a looser fit, negative for tighter. Only used when 'Same material' is checked.">
               <label for="BottomRabbetCorrectionField">Rabbet correction</label>
               <input type="number" step="any" id="BottomRabbetCorrectionField" placeholder="Correction" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- ── Side Overhang ─────────────────────────────────────────────────── -->
-  <!-- Only relevant with Lid Type = None: set End 1/End 2's own height below the
-       box height and Side 1/Side 2 (always the full box height) overhang them by
-       the difference, tapered by a chamfer at each end.       -- by Claude 9/19/2026 -->
-  <div class="section-header">Side Overhang</div>
-  <div class="card" id="showHideSideOverhang" style="display: none;">
-    <div class="card-body clearfix">
-      <div style="font-size: 11px; opacity: 0.8; margin-bottom: 8px;">Only available with Lid Type = None. Set the height of Front &amp; Back (End 1 &amp; End 2) below the box height, independently for each; Left &amp; Right (Side 1 &amp; Side 2) stay the full box height, so the difference on each side becomes an overhang tapered by a chamfer down to that end piece at the corner.</div>
-      <div class="clearfix" style="margin-bottom: 6px;">
-        <div class="field-row" style="float: left; width: 230px; margin-bottom: 0; margin-right: 20px;" title="Height of Front (End 1). Must be less than or equal to the box height - set it lower to create the overhang on that side. Defaults to the box height (= no overhang).">
-          <label for="End1HeightField">End height (Front)</label>
-          <input type="number" step="any" id="End1HeightField" placeholder="End height" oninput="onSideOverhangFieldsChanged()" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
-        </div>
-        <div class="field-row" style="float: left; width: 230px; margin-bottom: 0;" title="Angle of Front (End 1)'s own chamfer, measured from vertical (degrees). 45 = classic symmetric chamfer; smaller = steeper/shorter, bigger = shallower/longer. Its horizontal run is worked out from this angle and the actual overhang.">
-          <label for="End1ChamferAngleField">Chamfer angle (Front)</label>
-          <input type="number" step="any" min="1" max="89" id="End1ChamferAngleField" placeholder="Degrees" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
-        </div>
-      </div>
-      <div class="clearfix" style="margin-bottom: 6px;">
-        <div class="field-row" style="float: left; width: 230px; margin-bottom: 0; margin-right: 20px;" title="Height of Back (End 2). Must be less than or equal to the box height - set it lower to create the overhang on that side. Defaults to the box height (= no overhang).">
-          <label for="End2HeightField">End height (Back)</label>
-          <input type="number" step="any" id="End2HeightField" placeholder="End height" oninput="onSideOverhangFieldsChanged()" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
-        </div>
-        <div class="field-row" style="float: left; width: 230px; margin-bottom: 0;" title="Angle of Back (End 2)'s own chamfer, measured from vertical (degrees), independently of Front's. 45 = classic symmetric chamfer; smaller = steeper/shorter, bigger = shallower/longer.">
-          <label for="End2ChamferAngleField">Chamfer angle (Back)</label>
-          <input type="number" step="any" min="1" max="89" id="End2ChamferAngleField" placeholder="Degrees" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;"/>
-        </div>
-      </div>
-      <div style="font-size: 11px; opacity: 0.8; min-height: 14px;" id="SideOverhangComputedText"></div>
     </div>
   </div>
 
@@ -409,11 +413,37 @@
     var lidCheckItem = document.getElementById("MakeLidCheckItem");
     if (lidCheckItem) { lidCheckItem.style.display = (selectedIndex === 3) ? "none" : "block"; }
 
+    onSideOverhangFieldsChanged();
     onGeometryFieldChanged();
+  }
 
-    // "Side Overhang" only makes sense without a lid (index 3 = None) -- by Claude 9/19/2026
-    var sideOverhangCard = document.getElementById("showHideSideOverhang");
-    if (sideOverhangCard) { sideOverhangCard.style.display = (selectedIndex === 3) ? "block" : "none"; }
+  // Side Overhang (End 1/End 2 height + chamfer) only makes sense with Lid Type =
+  // None (ValidateEndHeight on the Lua side rejects it otherwise) - rather than
+  // let the user set it up and only find out on OK, lock Front/Back height to the
+  // box height and greyed out (no overhang possible) whenever a real Lid is
+  // selected, same for the now-pointless chamfer angle fields. Called on every
+  // Lid Type change and on init, so the lock is always in sync.  -- by Claude 9/26/2026
+  function updateSideOverhangLidLock() {
+    var lidSelect = document.getElementById("LidTypeSelect");
+    var heightEl = document.getElementById("HeightField");
+    var end1HeightEl = document.getElementById("End1HeightField");
+    var end2HeightEl = document.getElementById("End2HeightField");
+    var end1ChamferEl = document.getElementById("End1ChamferAngleField");
+    var end2ChamferEl = document.getElementById("End2ChamferAngleField");
+    if (!lidSelect || !heightEl || !end1HeightEl || !end2HeightEl) { return; }
+
+    // Lid Type index 3 = None (see imgFiles in onLidTypeChanged) - any other
+    // index means a real lid is fitted, so no overhang is possible.
+    var lidFitted = lidSelect.selectedIndex !== 3;
+
+    if (lidFitted) {
+      end1HeightEl.value = heightEl.value;
+      end2HeightEl.value = heightEl.value;
+    }
+    end1HeightEl.disabled = lidFitted;
+    end2HeightEl.disabled = lidFitted;
+    if (end1ChamferEl) { end1ChamferEl.disabled = lidFitted; }
+    if (end2ChamferEl) { end2ChamferEl.disabled = lidFitted; }
   }
 
   // Shows the resulting overhang(s) (Height - End height) as the user types, purely
@@ -421,6 +451,8 @@
   // Back can now each have their own End height, so each gets its own reading, only
   // shown when that side actually has an overhang.                -- by Claude 9/20/2026
   function onSideOverhangFieldsChanged() {
+    updateSideOverhangLidLock();
+
     var heightEl = document.getElementById("HeightField");
     var end1HeightEl = document.getElementById("End1HeightField");
     var end2HeightEl = document.getElementById("End2HeightField");
@@ -641,7 +673,6 @@
     if (lidSelect) {
       onLidTypeChanged(lidSelect);
     }
-    onSideOverhangFieldsChanged();
 
     var bottomSelect = document.getElementById("BottomTypeSelect");
     if (bottomSelect) {
