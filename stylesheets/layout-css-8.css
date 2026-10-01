@@ -6,8 +6,8 @@
 body {
   font-family: Tahoma, Arial, sans-serif;
   font-size: 15px;
-  background-color: #e8eaf0;
-  color: #1a1f2e;
+  background-color: #e8f0ea;
+  color: #1a2e1f;
   margin: 0;
   padding: 0;
   zoom: 100%;
@@ -25,7 +25,7 @@ body {
 
 /* ── Section header bar ───────────────────────────────────────────── */
 .section-header {
-  background-color: #2255aa;
+  background-color: #1c8f47;
   color: #ffffff;
   font-size: 15px;
   font-weight: bold;
@@ -37,7 +37,7 @@ body {
 /* ── White card container ─────────────────────────────────────────── */
 .card {
   background-color: #ffffff;
-  border: 1px solid #c0c4d0;
+  border: 1px solid #c0d0c4;
   margin-bottom: 10px;
 }
 .card-body {
@@ -46,9 +46,9 @@ body {
 
 /* ── Light-gray sub-panel ─────────────────────────────────────────── */
 .sub-panel {
-  background-color: #f2f4f8;
-  border: 1px solid #d0d4de;
-  border-left: 3px solid #2255aa;
+  background-color: #f2f8f4;
+  border: 1px solid #d0ded4;
+  border-left: 3px solid #1c8f47;
   padding: 8px 10px;
 }
 .sub-panel-title {
@@ -56,7 +56,7 @@ body {
   font-weight: bold;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #2255aa;
+  color: #1c8f47;
   margin-bottom: 7px;
 }
 
@@ -64,8 +64,8 @@ body {
 .header-image {
   float: left;
   width: 170px;
-  background-color: #f2f4f8;
-  border-right: 1px solid #d0d4de;
+  background-color: #f2f8f4;
+  border-right: 1px solid #d0ded4;
   padding: 10px;
   text-align: center;
 }
@@ -80,7 +80,7 @@ body {
 }
 .header-text p {
   font-size: 18px;
-  color: #6b7280;
+  color: #6b8072;
   line-height: 1.6;
   margin-bottom: 5px;
 }
@@ -88,7 +88,7 @@ body {
   margin-bottom: 0;
 }
 .header-text u {
-  color: #2255aa;
+  color: #1c8f47;
   text-decoration: none;
   font-weight: bold;
 }
@@ -159,7 +159,7 @@ body {
    box height while a Lid is fitted - see onLidTypeChanged) -- by Claude 9/26/2026 */
 .field-row input:disabled {
     opacity: 0.55;
-    background-color: #eceef2;
+    background-color: #ecf2ee;
     cursor: not-allowed;
 }
 
@@ -169,10 +169,10 @@ body {
   margin-bottom: 8px;
   font-size: 15px;
   font-weight: bold;
-  color: #374151;
+  color: #375141;
 }
 .checkbox-row:hover {
-  background-color: #e8eaf0;
+  background-color: #e8f0ea;
 }
 .checkbox-row input {
   margin-right: 4px;
@@ -185,11 +185,11 @@ body {
   margin-bottom: 4px;
   font-size: 15px;
   font-weight: bold;
-  color: #374151;
+  color: #375141;
   white-space: nowrap;
 }
 .face-checkbox:hover {
-  background-color: #e8eaf0;
+  background-color: #e8f0ea;
 }
 .face-checkbox input {
   margin-right: 3px;
@@ -198,7 +198,7 @@ body {
 /* ── Tool picker bar ──────────────────────────────────────────────── */
 .tool-bar {
   background-color: #ffffff;
-  border: 1px solid #c0c4d0;
+  border: 1px solid #c0d0c4;
   padding: 8px 10px;
   margin-bottom: 10px;
 }
@@ -214,13 +214,13 @@ body {
   width: 225px;
   line-height: 36px;
   font-size: 15px;
-  color: #6b7280;
+  color: #6b8072;
   text-align: right;
 }
 input.ToolPicker {
-  background-color: #dce8ff;
-  color: #2255aa;
-  border: 1px solid #2255aa;
+  background-color: #dcffe8;
+  color: #1c8f47;
+  border: 1px solid #1c8f47;
   font-family: Tahoma, Arial, sans-serif;
   font-size: 15px;
   font-weight: bold;
@@ -229,18 +229,18 @@ input.ToolPicker {
   vertical-align: middle;
 }
 input.ToolPicker:hover {
-  background-color: #c8dcff;
+  background-color: #c8ffdc;
 }
 #ToolNameField {
   font-size: 15px;
-  color: #374151;
+  color: #375141;
   font-style: italic;
   margin-left: 8px;
   vertical-align: middle;
 }
 .no-toolpath-label {
   font-size: 15px;
-  color: #374151;
+  color: #375141;
   vertical-align: middle;
 }
 .no-toolpath-label input {
@@ -250,7 +250,7 @@ input.ToolPicker:hover {
 .cut-depth-label {
   font-size: 15px;
   font-weight: bold;
-  color: #374151;
+  color: #375141;
   vertical-align: middle;
 }
 .cut-depth-input {
@@ -274,10 +274,10 @@ input.ToolPicker:hover {
 }
 .type-panel {
   background-color: #ffffff;
-  border: 1px solid #c0c4d0;
+  border: 1px solid #c0d0c4;
 }
 .type-panel-header {
-  background-color: #2255aa;
+  background-color: #1c8f47;
   padding: 5px 10px;
   font-size: 15px;
   font-weight: bold;
@@ -287,7 +287,7 @@ input.ToolPicker:hover {
 }
 .type-option {
   padding: 8px 10px;
-  border-bottom: 1px solid #e8eaf0;
+  border-bottom: 1px solid #e8f0ea;
   line-height: 26px;
 }
 .type-option-last {
@@ -296,14 +296,14 @@ input.ToolPicker:hover {
 }
 .type-option:hover,
 .type-option-last:hover {
-  background-color: #f2f4f8;
+  background-color: #f2f8f4;
 }
 .type-option-radio {
   float: left;
   width: 130px;
   font-size: 15px;
   font-weight: bold;
-  color: #374151;
+  color: #375141;
   vertical-align: middle;
 }
 .type-option-radio input {
@@ -346,7 +346,7 @@ input.ToolPicker:hover {
 /* ── Footer bar ───────────────────────────────────────────────────── */
 .footer-bar {
   background-color: #ffffff;
-  border: 1px solid #c0c4d0;
+  border: 1px solid #c0d0c4;
   padding: 10px 12px;
 }
 .footer-ok-button {
@@ -366,7 +366,7 @@ input.ToolPicker:hover {
 }
 .footer-option-item {
   font-size: 15px;
-  color: #374151;
+  color: #375141;
   margin-bottom: 4px;
 }
 .footer-option-item input {
@@ -400,9 +400,9 @@ input.ToolPicker:hover {
   background-color: #176a35;
 }
 #ButtonCancel {
-  background-color: #f2f4f8;
-  color: #6b7280;
-  border: 1px solid #c0c4d0;
+  background-color: #f2f8f4;
+  color: #6b8072;
+  border: 1px solid #c0d0c4;
   font-family: Tahoma, Arial, sans-serif;
   font-size: 15px;
   font-weight: bold;
@@ -410,50 +410,50 @@ input.ToolPicker:hover {
   cursor: pointer;
 }
 #ButtonCancel:hover {
-  background-color: #e2e5ee;
+  background-color: #e2eee5;
 }
 
 /* ── Dark mode overrides ──────────────────────────────────────────── */
 body.dark-mode {
-  background-color: #1a1d24;
-  color: #d4d8e8;
+  background-color: #1a241d;
+  color: #d4e8d8;
 }
 body.dark-mode .card {
-  background-color: #22262f;
-  border-color: #383d4a;
+  background-color: #222f26;
+  border-color: #384a3d;
 }
 body.dark-mode .card-body {
-  background-color: #22262f;
+  background-color: #222f26;
 }
 body.dark-mode .section-header {
-  background-color: #1a3a6b;
+  background-color: #1a6b3a;
 }
 body.dark-mode .sub-panel {
-  background-color: #2a2f3b;
-  border-color: #383d4a;
-  border-left-color: #3a6ab0;
+  background-color: #2a3b2f;
+  border-color: #384a3d;
+  border-left-color: #3ab06a;
 }
 body.dark-mode .sub-panel-title {
-  color: #6ea0e0;
+  color: #6ee0a0;
 }
 body.dark-mode .header-image {
-  background-color: #2a2f3b;
-  border-right-color: #383d4a;
+  background-color: #2a3b2f;
+  border-right-color: #384a3d;
 }
 body.dark-mode .header-text p {
-  color: #8a92a8;
+  color: #8aa892;
 }
 body.dark-mode .header-text u {
-  color: #6ea0e0;
+  color: #6ee0a0;
 }
 body.dark-mode .field-row label {
-  color: #b0b8cc;
+  color: #b0ccb8;
 }
 body.dark-mode .field-row input,
 body.dark-mode .field-row select {
-  background-color: #1a1d24;
-  border-color: #383d4a;
-  color: #d4d8e8;
+  background-color: #1a241d;
+  border-color: #384a3d;
+  color: #d4e8d8;
 }
 body.dark-mode .field-row input.invalid {
   border-color: #e05555;
@@ -461,92 +461,92 @@ body.dark-mode .field-row input.invalid {
 }
 body.dark-mode .field-row input:disabled {
   opacity: 0.4;
-  background-color: #23262f;
+  background-color: #232f26;
 }
 body.dark-mode .checkbox-row {
-  color: #b0b8cc;
+  color: #b0ccb8;
 }
 body.dark-mode .checkbox-row:hover {
-  background-color: #2f3542;
+  background-color: #2f4235;
 }
 body.dark-mode .face-checkbox {
-  color: #b0b8cc;
+  color: #b0ccb8;
 }
 body.dark-mode .face-checkbox:hover {
-  background-color: #2f3542;
+  background-color: #2f4235;
 }
 body.dark-mode .tool-bar {
-  background-color: #22262f;
-  border-color: #383d4a;
+  background-color: #222f26;
+  border-color: #384a3d;
 }
 body.dark-mode .tool-bar-right {
-  color: #8a92a8;
+  color: #8aa892;
 }
 body.dark-mode .cut-depth-label {
-  color: #b0b8cc;
+  color: #b0ccb8;
 }
 body.dark-mode .cut-depth-input {
-  background-color: #1a1d24;
-  border-color: #383d4a;
-  color: #d4d8e8;
+  background-color: #1a241d;
+  border-color: #384a3d;
+  color: #d4e8d8;
 }
 body.dark-mode input.ToolPicker {
-  background-color: #1a3a6b;
-  color: #90bcf0;
-  border-color: #3a6ab0;
+  background-color: #1a6b3a;
+  color: #90f0bc;
+  border-color: #3ab06a;
 }
 body.dark-mode input.ToolPicker:hover {
-  background-color: #234a86;
+  background-color: #23864a;
 }
 body.dark-mode #ToolNameField {
-  color: #8a92a8;
+  color: #8aa892;
 }
 body.dark-mode .no-toolpath-label {
-  color: #8a92a8;
+  color: #8aa892;
 }
 body.dark-mode .type-panel {
-  background-color: #22262f;
-  border-color: #383d4a;
+  background-color: #222f26;
+  border-color: #384a3d;
 }
 body.dark-mode .type-panel-header {
-  background-color: #1a3a6b;
+  background-color: #1a6b3a;
 }
 body.dark-mode .type-option {
-  border-bottom-color: #383d4a;
+  border-bottom-color: #384a3d;
 }
 body.dark-mode .type-option:hover,
 body.dark-mode .type-option-last:hover {
-  background-color: #2a2f3b;
+  background-color: #2a3b2f;
 }
 body.dark-mode .type-option-radio {
-  color: #b0b8cc;
+  color: #b0ccb8;
 }
 body.dark-mode .footer-bar {
-  background-color: #22262f;
-  border-color: #383d4a;
+  background-color: #222f26;
+  border-color: #384a3d;
 }
 body.dark-mode .footer-option-item {
-  color: #8a92a8;
+  color: #8aa892;
 }
 body.dark-mode #ButtonOK:hover {
   background-color: #24984c;
 }
 body.dark-mode #ButtonCancel {
-  background-color: #2a2f3b;
-  color: #8a92a8;
-  border-color: #383d4a;
+  background-color: #2a3b2f;
+  color: #8aa892;
+  border-color: #384a3d;
 }
 body.dark-mode #ButtonCancel:hover {
-  background-color: #333947;
+  background-color: #334739;
 }
 body.dark-mode select {
-  background-color: #1a1d24;
-  color: #d4d8e8;
-  border: 1px solid #383d4a;
+  background-color: #1a241d;
+  color: #d4e8d8;
+  border: 1px solid #384a3d;
 }
 body.dark-mode .type-dropdown-content {
-  background-color: #22262f;
+  background-color: #222f26;
 }
 body.dark-mode .footer-option-item label {
-  color: #8a92a8;
+  color: #8aa892;
 }

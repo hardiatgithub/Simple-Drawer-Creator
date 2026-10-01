@@ -2,6 +2,11 @@
 
 Aenderungen an diesem Gadget-Fork ("Vectric-Box-Gadget_claude"), damit auch nach einer neuen Chat-Sitzung nachvollziehbar bleibt, was wann und warum geaendert wurde.
 
+### 2026-10-01
+
+- **Fix: Width und Depth wurden in der fertigen Box-Geometrie vertauscht**
+  Gleicher Fix wie im parallelen `Simple_Box_Creator_Dev`-Branch (gremlins `users/hardiagithub/SlidingBottom`): bei z.B. Width=360/Depth=800 kamen die Teile vertauscht heraus (Side 1/Side 2 = Left/Right zu kurz, End 1/End 2 = Front/Back zu lang). Ursache: `ReadOptionsFromDialog`/`AddDoubleField` in `DisplayDialog.xlua` lasen `options.width` aus dem "Width"-Feld und `options.depth` aus dem "Depth"-Feld, waehrend `CreateFaces.xlua` (`MakeSideFace`/`MakeEndFace`, unveraendert) `options.width` fuer die Laenge von Side 1/Side 2 und `options.depth` fuer die Laenge von End 1/End 2 verwendet - und Side 1/Side 2 (Left/Right) brauchen als Laenge die real eingegebene Depth, End 1/End 2 (Front/Back) die real eingegebene Width. Fix (nur in `DisplayDialog.xlua`): Zuordnung Width-Feld/Depth-Feld zu `options.width`/`options.depth` beim Einlesen und beim Befuellen des Dialogs vertauscht; die zugehoerigen Validierungsmeldungen (`ValidateBoxDimensions`, `ValidateJointWidths`) wurden entsprechend mitgetauscht, damit Fehlermeldung und rot markiertes Feld weiterhin zusammenpassen. `CreateFaces.xlua` musste nicht angefasst werden. Noch nicht an einem echten Testlauf in diesem Branch bestaetigt (der Fix wurde zuerst in `Simple_Box_Creator_Dev` getestet und bestaetigt, hier nur uebertragen).
+
 ### 2026-09-22
 
 - **Fix: Nut in Side 1/Side 2 an der End-1-Ecke (vorne) um halbe Materialstaerke verkuerzt**
