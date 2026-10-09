@@ -7,6 +7,21 @@
   <title>Box Creator Gadget</title>
   <link href="stylesheets/layout-css-8.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="scripts/browser-compatibility.js"></script>
+  <!-- box-hardi only: footer selects + turquoise colour theme (class on #page-wrapper, so the
+       existing body.dark-mode rules still apply and get their own turquoise variant below). -- by Claude 10/9/2026 -->
+  <style type="text/css">
+    .footer-select { font-family: Tahoma, Arial, sans-serif; font-size: 15px; width: 105px; vertical-align: baseline; }
+    .theme-teal .section-header, .theme-teal .type-panel-header { background-color: #0f7c80; }
+    .theme-teal .sub-panel { border-left-color: #0f7c80; }
+    .theme-teal .sub-panel-title, .theme-teal .header-text u { color: #0f7c80; }
+    .theme-teal input.ToolPicker { background-color: #d4f1f0; color: #0b6468; border-color: #0f7c80; }
+    .theme-teal input.ToolPicker:hover { background-color: #bfe8e6; }
+    body.dark-mode .theme-teal .section-header, body.dark-mode .theme-teal .type-panel-header { background-color: #0e4a4d; }
+    body.dark-mode .theme-teal .sub-panel { border-left-color: #2a9a9e; }
+    body.dark-mode .theme-teal .sub-panel-title, body.dark-mode .theme-teal .header-text u { color: #5fd0cb; }
+    body.dark-mode .theme-teal input.ToolPicker { background-color: #0e4a4d; color: #8fe3de; border-color: #2a9a9e; }
+    body.dark-mode .theme-teal input.ToolPicker:hover { background-color: #145c60; }
+  </style>
 </head>
 <body>
 <div id="page-wrapper">
@@ -267,7 +282,7 @@
           <td style="width: 245px; vertical-align: middle;">
             <div class="sub-panel">
               <div class="sub-panel-title">Groove</div>
-              <div class="field-row" title="Width of the groove slot (vertical height of the dado), independent of material thickness - set this to the actual thickness of the bottom panel you'll slide in, e.g. 4mm for a thin plywood/hardboard bottom. If 'Same material' is checked, set this to whatever width you want the rabbeted edge to seat at (can be smaller than the material thickness).">
+              <div class="field-row" title="Width of the groove slot (vertical height of the dado), independent of material thickness - set this to the actual thickness of the bottom panel you'll slide in, e.g. 4mm for a thin plywood/hardboard bottom. If the bottom is thicker, a rabbet brings its edge down to this width. The cutting tool must fit into this width (plus allowance).">
                 <label for="BottomGrooveWidthField">Groove width</label>
                 <input type="number" step="any" id="BottomGrooveWidthField" placeholder="Groove width" onkeydown="return event.keyCode !== 189 && event.keyCode !== 109;" onkeyup="updateBottomRabbetInfo()" onchange="updateBottomRabbetInfo(); onGeometryFieldChanged();"/>
               </div>
@@ -366,6 +381,23 @@
       <div class="footer-option-item">
         <label><input type="checkbox" class="LuaButton" id="LabelFaces" />Label faces</label>
       </div>
+      <!-- box-hardi only: colour theme + dialog language, saved like Zoom Level. -- by Claude 10/9/2026 -->
+      <div class="clearfix" style="margin-top: 2px;">
+        <div class="footer-option-item" style="float: left;" title="Colour of the dialog">
+          <label for="ColorTheme" style="margin-right: 6px;">Color</label>
+          <select id="ColorTheme" class="footer-select" onchange="onColorThemeChanged(this)">
+            <option value="Blue">Blue</option>
+            <option value="Turquoise">Turquoise</option>
+          </select>
+        </div>
+        <div class="footer-option-item" style="float: right;" title="Language of the dialog (pop-up messages stay in English)">
+          <label for="Language" style="margin-right: 6px;">Language</label>
+          <select id="Language" class="footer-select" onchange="onLanguageChanged(this)">
+            <option value="English">English</option>
+            <option value="Deutsch">Deutsch</option>
+          </select>
+        </div>
+      </div>
     </div>
     <div class="footer-cancel-button">
       <button type="button" id="ButtonCancel">Cancel</button>
@@ -414,6 +446,208 @@
     if (event.keyCode === 189 || event.keyCode === 109) {
       event.preventDefault();
     }
+  }
+
+  // ── Dialog language (English / Deutsch) and colour theme (Blue / Turquoise) ──
+  // box-hardi only. Every static text, tooltip, select option and button caption whose
+  // English text has a German entry in g_DE is collected once and can then be switched
+  // back and forth; the few texts set from script (hint lines, Side/All Joints label,
+  // Bottom checkbox tooltip) go through T(). Plain DOM walking only, so it stays IE7-safe.
+  // Messages that come from Lua (message boxes, invalid-field tooltips) stay English.
+  //                                                                 -- by Claude 10/9/2026
+  var g_lang = "English";
+  var g_DE = {
+      "This gadget creates a box of the specified external dimensions.": "Dieses Gadget erstellt eine Box mit den angegebenen Au\u00dfenma\u00dfen.",
+      "There are several layers created depending on the options selected. Please hover over any option to see a description.": "Je nach gew\u00e4hlten Optionen werden mehrere Layer angelegt. Fahre mit der Maus \u00fcber eine Option, um eine Beschreibung zu sehen.",
+      "Geometry Options": "Geometrie",
+      "Box Dimensions": "Abmessungen",
+      "Width": "Breite",
+      "Depth": "Tiefe",
+      "Height": "H\u00f6he",
+      "Dovetail Angle": "Zinkenwinkel",
+      "Joint Widths": "Zinkenbreiten",
+      "Show all joint widths": "Alle Zinkenbreiten zeigen",
+      "Side joints": "Seitenzinken",
+      "Side Joints": "Seitenzinken",
+      "All Joints": "Alle Zinken",
+      "Lid joints": "Deckelzinken",
+      "Bottom joints": "Bodenzinken",
+      "Machining & Layout": "Bearbeitung & Layout",
+      "Allowance": "Spiel",
+      "Part Spacing": "Teileabstand",
+      "Clamping Margin": "Spannrand",
+      "Create dogbones": "Dogbones erstellen",
+      "Fit to single sheet": "Alles auf ein Blatt",
+      "Part Layout": "Anordnung",
+      "Rotated": "Gedreht",
+      "Joint Type": "Verbindung",
+      "Box": "Fingerzinken",
+      "Dovetail": "Schwalbe",
+      "Lid Type": "Deckel",
+      "Inset": "Eingelassen",
+      "Fingers": "Gezinkt",
+      "Flat": "Flach",
+      "None": "Ohne",
+      "Open Chamfer": "Offen mit Fase",
+      "Bottom Type": "Boden",
+      "Grooved": "Eingenutet",
+      "Open Chamfer Options": "Optionen: Offen mit Fase",
+      "Side Overhang: Front & Back can each get their own height below the box height, tapered by a chamfer. Only available with Lid Type = Open Chamfer (a lidless box with chamfered Front and Back).": "Seitlicher \u00dcberstand: Front und R\u00fcckwand k\u00f6nnen jeweils eine eigene H\u00f6he unter der Boxh\u00f6he bekommen, mit einer Fase als \u00dcbergang. Nur bei Deckel = Offen mit Fase (eine Box ohne Deckel mit abgeschr\u00e4gter Front und R\u00fcckwand).",
+      "Backside": "R\u00fcckwand",
+      "Frontside": "Front",
+      "Chamfer Angle": "Fasenwinkel",
+      "Grooved Bottom Options": "Optionen: Eingenuteter Boden",
+      "Slide-in bottom: grooved into Side 1, Side 2 & End 1 (with Dovetail joints, End 1's groove has to be cut from its other side - tick \"Reverse End 1 (Front) for groove on own sheet\" to get it on a sheet of its own, otherwise it is skipped). End 2 is shortened to the top of the groove, so the panel can always slide in/out there, even after glue-up. Uncheck \"Bottom\" under Faces To Machine below to keep the groove but skip cutting the panel itself (e.g. to slide in your own material).": "Einschiebboden: Nut in Seite 1, Seite 2 und Front (End 1). Bei Schwalbenschwanz muss die Nut der Front von der anderen Seite gefr\u00e4st werden - \u201eFront (End 1) f\u00fcr Nut auf eigenem Blatt umdrehen\u201c anhaken, um sie auf ein eigenes Blatt zu legen, sonst entf\u00e4llt sie. Die R\u00fcckwand (End 2) wird bis zur Oberkante der Nut gek\u00fcrzt, damit sich der Boden dort immer ein- und ausschieben l\u00e4sst, auch nach dem Verleimen. \u201eBoden\u201c unter \u201eZu fr\u00e4sende Teile\u201c abhaken, um nur die Nut zu fr\u00e4sen und den Boden selbst nicht auszuschneiden (z. B. f\u00fcr eigenes Material).",
+      "Bottom Panel": "Bodenplatte",
+      "Bottom Thickness": "Bodenst\u00e4rke",
+      "Rabbet correction": "Falz-Korrektur",
+      "Bottom Clearance": "Bodenluft",
+      "Groove": "Nut",
+      "Groove width": "Nutbreite",
+      "Groove depth": "Nuttiefe",
+      "Groove offset": "Nutabstand",
+      "Reverse End 1 (Front) for groove on own sheet": "Front (End 1) f\u00fcr Nut auf eigenem Blatt umdrehen",
+      "Tools": "Werkzeuge",
+      "No toolpath": "Kein Werkzeugweg",
+      "Cut Depth": "Schnitttiefe",
+      "Faces To Machine": "Zu fr\u00e4sende Teile",
+      "Lid": "Deckel",
+      "Bottom": "Boden",
+      "Left": "Links",
+      "Right": "Rechts",
+      "Front": "Vorne",
+      "Back": "Hinten",
+      "Create joints to un-checked faces": "Zinken auch zu abgew\u00e4hlten Teilen",
+      "Enable dark mode": "Dunkler Modus",
+      "Zoom Level": "Zoom",
+      "Label faces": "Teile beschriften",
+      "Cancel": "Abbrechen",
+      "Color": "Farbe",
+      "Blue": "Blau",
+      "Turquoise": "T\u00fcrkis",
+      "Language": "Sprache",
+      "Cutting": "Fr\u00e4ser",
+      "Roundover": "Abrunden",
+      "Side to side width of the box outside": "Breite der Box von Seite zu Seite (au\u00dfen)",
+      "Front to back depth of the box outside": "Tiefe der Box von vorne nach hinten (au\u00dfen)",
+      "Top to bottom height of the box outside": "H\u00f6he der Box von unten nach oben (au\u00dfen)",
+      "Angle of the dovetail joint, between 45 and 85 degrees": "Winkel der Schwalbenschwanz-Zinken, zwischen 45 und 85 Grad",
+      "When checked, shows all joint width options": "Wenn angehakt, werden alle Zinkenbreiten angezeigt",
+      "Width of the fingers": "Breite der Zinken",
+      "Width of the lid fingers": "Breite der Deckelzinken",
+      "Width of the bottom fingers": "Breite der Bodenzinken",
+      "Additional material removed in joints for better fitment, can be maximum of 1/2 the bit diameter.": "Zus\u00e4tzlich abgetragenes Material in den Verbindungen f\u00fcr eine bessere Passung, h\u00f6chstens der halbe Fr\u00e4serdurchmesser.",
+      "Spacing between parts when laying out on the material, should be at least twice bit diameter, if less than that will use twice bit diameter instead": "Abstand zwischen den Teilen auf dem Material, mindestens der doppelte Fr\u00e4serdurchmesser - ist er kleiner, wird der doppelte Fr\u00e4serdurchmesser verwendet.",
+      "Margin on the edge for clamping the workpiece": "Rand an der Plattenkante zum Spannen des Werkst\u00fccks",
+      "When checked will create the dogbones. Warning! parts will require additional processing for joints to work": "Wenn angehakt, werden Dogbones erstellt. Achtung: Die Teile brauchen dann Nacharbeit, damit die Verbindungen passen.",
+      "When checked, fits as many pieces as possible onto a single sheet instead of creating additional sheets. Pieces that still don't fit will be placed outside the sheet boundary.": "Wenn angehakt, werden so viele Teile wie m\u00f6glich auf ein Blatt gelegt, statt weitere Bl\u00e4tter anzulegen. Teile, die nicht passen, landen au\u00dferhalb der Platte.",
+      "How parts are oriented when laid out on the material. Auto picks whichever orientation (as-is or rotated 90 degrees) fits each part best. Normal never rotates parts. Rotated always rotates every part 90 degrees.": "Wie die Teile auf dem Material ausgerichtet werden. Auto w\u00e4hlt je Teil die besser passende Ausrichtung (wie gezeichnet oder um 90 Grad gedreht). Normal dreht nie. Gedreht dreht jedes Teil um 90 Grad.",
+      "Grooved: a dado groove is cut into Side 1, Side 2 and End 1 near the bottom edge so a flat bottom panel can be slid in from the open End 2 before it is glued on.": "Eingenutet: In Seite 1, Seite 2 und Front (End 1) wird nahe der Unterkante eine Nut gefr\u00e4st, damit ein flacher Boden von der offenen R\u00fcckwand (End 2) eingeschoben werden kann, bevor diese verleimt wird.",
+      "Angle of Back (End 2)'s own chamfer, measured from vertical (degrees), independently of Front's. 45 = classic symmetric chamfer; smaller = steeper/shorter, bigger = shallower/longer.": "Winkel der Fase an der R\u00fcckwand (End 2), von der Senkrechten gemessen (Grad), unabh\u00e4ngig von der Front. 45 = klassische symmetrische Fase; kleiner = steiler/k\u00fcrzer, gr\u00f6\u00dfer = flacher/l\u00e4nger.",
+      "Height of Back (End 2). Must be less than or equal to the box height - set it lower to create the overhang on that side. Defaults to the box height (= no overhang).": "H\u00f6he der R\u00fcckwand (End 2). Muss kleiner oder gleich der Boxh\u00f6he sein - niedriger einstellen, um auf dieser Seite einen \u00dcberstand zu erzeugen. Standard ist die Boxh\u00f6he (= kein \u00dcberstand).",
+      "Angle of Front (End 1)'s own chamfer, measured from vertical (degrees). 45 = classic symmetric chamfer; smaller = steeper/shorter, bigger = shallower/longer. Its horizontal run is worked out from this angle and the actual overhang.": "Winkel der Fase an der Front (End 1), von der Senkrechten gemessen (Grad). 45 = klassische symmetrische Fase; kleiner = steiler/k\u00fcrzer, gr\u00f6\u00dfer = flacher/l\u00e4nger. Die waagrechte L\u00e4nge ergibt sich aus diesem Winkel und dem tats\u00e4chlichen \u00dcberstand.",
+      "Height of Front (End 1). Must be less than or equal to the box height - set it lower to create the overhang on that side. Defaults to the box height (= no overhang).": "H\u00f6he der Front (End 1). Muss kleiner oder gleich der Boxh\u00f6he sein - niedriger einstellen, um auf dieser Seite einen \u00dcberstand zu erzeugen. Standard ist die Boxh\u00f6he (= kein \u00dcberstand).",
+      "Thickness of the bottom panel - defaults to the material thickness. If it is thinner than the material, the bottom is cut from separate stock: it is placed on its own sheet (Bottom Panel + thickness) and its own layers (Bottom Panel / CutOut Bottom), with its own cutout toolpath at the bottom thickness. If it is thicker than the groove width, a rabbet is milled along its Side 1, Side 2 and End 1 edges down to the groove width, so it still seats in the groove; End 2's edge stays full thickness, since the panel is slid in from that opening. If it is not thicker than the groove, no rabbet is milled (e.g. a thinner plywood bottom cut from separate material).": "St\u00e4rke der Bodenplatte - Standard ist die Materialst\u00e4rke. Ist sie d\u00fcnner als das Material, wird der Boden aus separatem Material geschnitten: Er kommt auf ein eigenes Blatt (Bottom Panel + St\u00e4rke) und eigene Layer (Bottom Panel / CutOut Bottom), mit eigenem Ausschnitt-Werkzeugweg in Bodenst\u00e4rke. Ist sie dicker als die Nutbreite, wird an den Kanten zu Seite 1, Seite 2 und Front (End 1) ein Falz bis auf die Nutbreite gefr\u00e4st, damit der Boden in die Nut passt; die Kante zur R\u00fcckwand (End 2) bleibt voll, weil der Boden dort eingeschoben wird. Ist sie nicht dicker als die Nut, wird kein Falz gefr\u00e4st (z. B. d\u00fcnnerer Sperrholzboden aus separatem Material).",
+      "Fine-tune correction added to the computed rabbet depth (bottom thickness minus groove width), e.g. a small positive value for a looser fit, negative for tighter. Only used when the bottom is thicker than the groove width (i.e. a rabbet is milled).": "Feinkorrektur, die zur berechneten Falztiefe (Bodenst\u00e4rke minus Nutbreite) addiert wird, z. B. ein kleiner positiver Wert f\u00fcr mehr Spiel, ein negativer f\u00fcr strammer. Wirkt nur, wenn der Boden dicker als die Nutbreite ist (also ein Falz gefr\u00e4st wird).",
+      "Clearance subtracted from how far the panel reaches into each of the 3 grooves (Side 1, Side 2, End 1), for an easier slide fit.": "Luft, die davon abgezogen wird, wie weit der Boden in jede der 3 Nuten greift (Seite 1, Seite 2, Front), damit er sich leichter einschieben l\u00e4sst.",
+      "Width of the groove slot (vertical height of the dado), independent of material thickness - set this to the actual thickness of the bottom panel you'll slide in, e.g. 4mm for a thin plywood/hardboard bottom. If the bottom is thicker, a rabbet brings its edge down to this width. The cutting tool must fit into this width (plus allowance).": "Breite der Nut (senkrechte H\u00f6he des Nutschlitzes), unabh\u00e4ngig von der Materialst\u00e4rke - auf die tats\u00e4chliche St\u00e4rke des eingeschobenen Bodens einstellen, z. B. 4 mm f\u00fcr einen d\u00fcnnen Sperrholz- oder Hartfaserboden. Ist der Boden dicker, bringt ein Falz seine Kante auf diese Breite. Der Fr\u00e4ser muss in diese Breite passen (plus Spiel).",
+      "How deep the groove is plowed into Side 1, Side 2 and End 1 (must be less than the material thickness)": "Wie tief die Nut in Seite 1, Seite 2 und Front (End 1) gefr\u00e4st wird (muss kleiner als die Materialst\u00e4rke sein)",
+      "Distance from the outer bottom edge of the walls up to the TOP of the groove that captures the bottom panel (must be at least the groove width)": "Abstand von der Unterkante der W\u00e4nde bis zur OBERKANTE der Nut, die den Boden aufnimmt (mindestens die Nutbreite)",
+      "Dovetail joints only: End 1's groove has to go into the face that lies on the spoilboard when End 1 is cut. When checked, an extra sheet 'End 1 Groove (flipped)' is created: turn the cut End 1 over (left/right), stand it upright with its bottom edge against the left (X0) stop and push it into the sheet's lower left corner (against the Y0 stop) and run the groove toolpath there. The outline on that sheet is for reference only.": "Nur bei Schwalbenschwanz: Die Nut der Front (End 1) geh\u00f6rt in die Seite, die beim Ausschneiden auf der Opferplatte liegt. Wenn angehakt, wird ein zus\u00e4tzliches Blatt 'End 1 Groove (flipped)' angelegt: die ausgeschnittene Front links/rechts umdrehen, hochkant mit der Unterkante an den linken Anschlag (X0) stellen, in die linke untere Ecke schieben (gegen den Y0-Anschlag) und dort den Nut-Werkzeugweg fr\u00e4sen. Die Kontur auf diesem Blatt dient nur zur Orientierung.",
+      "The tool used for cutting out the box and fluting the dovetails": "Der Fr\u00e4ser zum Ausschneiden der Box und zum Nachfr\u00e4sen der Schwalbenschw\u00e4nze",
+      "Only create the vectors": "Nur die Vektoren erzeugen",
+      "The tool used for rounding over the finger edges. It is recommended to use a tool with a radius half the diameter of the cutting bit.": "Der Fr\u00e4ser zum Abrunden der Zinkenkanten. Empfohlen ist ein Radius vom halben Durchmesser des Schneidfr\u00e4sers.",
+      "Depth of cut for rounding over the finger edges (check with bit manufacturer but should be less than or equal to the roundover radius)": "Schnitttiefe beim Abrunden der Zinkenkanten (Herstellerangaben beachten, h\u00f6chstens der Abrundradius)",
+      "Note this stops the lid from being created, but the dimensions of the rest of the box will be the same. If you want it to be lidless box select none for lid type": "Damit wird der Deckel nicht erzeugt, die \u00fcbrigen Ma\u00dfe der Box bleiben aber gleich. F\u00fcr eine Box ohne Deckel beim Deckel \u201eOhne\u201c w\u00e4hlen.",
+      "Note this stops the bottom from being created, but the dimensions of the rest of the box will be the same. If you want it to be bottomless box select none for bottom type": "Damit wird der Boden nicht erzeugt, die \u00fcbrigen Ma\u00dfe der Box bleiben aber gleich. F\u00fcr eine Box ohne Boden beim Boden \u201eOhne\u201c w\u00e4hlen.",
+      "If unchecked then fingers to connect to faces which are not created will not be created": "Wenn nicht angehakt, werden Zinken zu nicht erzeugten Teilen weggelassen",
+      "Uncheck to skip cutting the bottom panel while still cutting the slide-in groove into Side 1, Side 2 & End 1 (and still shortening End 2) - useful if you want to slide in your own bottom material instead of the one this gadget would cut.": "Abhaken, um den Boden nicht auszuschneiden, die Einschub-Nut in Seite 1, Seite 2 und Front (End 1) aber trotzdem zu fr\u00e4sen (und die R\u00fcckwand trotzdem zu k\u00fcrzen) - praktisch, wenn du eigenes Bodenmaterial einschieben willst.",
+      "Colour of the dialog": "Farbe des Dialogs",
+      "Rabbet depth": "Falztiefe",
+      "(bottom thickness - groove width + rabbet correction)": "(Bodenst\u00e4rke - Nutbreite + Falz-Korrektur)",
+      "Bottom thickness equals the groove width - no rabbet needed.": "Bodenst\u00e4rke gleich Nutbreite - kein Falz n\u00f6tig.",
+      "Bottom is": "Boden ist",
+      "thinner than the groove width - no rabbet, it will have that much play in the groove. Reduce the groove width if that is too loose.": "d\u00fcnner als die Nutbreite - kein Falz, er hat so viel Spiel in der Nut. Nutbreite verringern, wenn das zu locker ist.",
+      "Overhang:": "\u00dcberstand:",
+      "Language of the dialog (pop-up messages stay in English)": "Sprache des Dialogs (Meldungsfenster bleiben englisch)"
+  };
+
+  function T(en) {
+    return (g_lang === "Deutsch" && g_DE[en]) ? g_DE[en] : en;
+  }
+
+  function i18nKey(s) {
+    return s ? s.replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "") : "";
+  }
+
+  // Elements whose text is set from script (skipped entirely), and elements whose
+  // tooltip is set from script (only the title is skipped).
+  var g_i18nSkipAll = { "SideJointLabel": 1, "ToolNameField": 1, "RoundoverToolNameField": 1,
+                        "BottomRabbetInfoText": 1, "SideOverhangComputedText": 1, "HiddenFields": 1 };
+  var g_i18nSkipTitle = { "MakeBottomCheckItem": 1 };
+  var g_i18n = null;
+
+  function collectI18n(node) {
+    for (var c = node.firstChild; c; c = c.nextSibling) {
+      if (c.nodeType === 3) {
+        var k = i18nKey(c.nodeValue);
+        if (k && g_DE[k]) { g_i18n.push({ kind: "text", el: c, en: c.nodeValue, key: k }); }
+      } else if (c.nodeType === 1) {
+        if (c.id && g_i18nSkipAll[c.id]) { continue; }
+        var tag = c.tagName.toLowerCase();
+        if (tag === "script" || tag === "style") { continue; }
+        var t = c.getAttribute("title");
+        if (t && !(c.id && g_i18nSkipTitle[c.id])) {
+          var kt = i18nKey(t);
+          if (g_DE[kt]) { g_i18n.push({ kind: "title", el: c, en: t, key: kt }); }
+        }
+        if (tag === "input") {
+          if (c.type === "button") {
+            var kv = i18nKey(c.value);
+            if (g_DE[kv]) { g_i18n.push({ kind: "value", el: c, en: c.value, key: kv }); }
+          }
+          continue;
+        }
+        if (tag === "select") {
+          for (var i = 0; i < c.options.length; i++) {
+            var ko = i18nKey(c.options[i].text);
+            if (g_DE[ko]) { g_i18n.push({ kind: "option", el: c.options[i], en: c.options[i].text, key: ko }); }
+          }
+          continue;
+        }
+        collectI18n(c);
+      }
+    }
+  }
+
+  function applyLanguage() {
+    if (!g_i18n) {
+      g_i18n = [];
+      collectI18n(document.getElementById("page-wrapper"));
+    }
+    var de = (g_lang === "Deutsch");
+    for (var i = 0; i < g_i18n.length; i++) {
+      var e = g_i18n[i];
+      var s = de ? g_DE[e.key] : e.en;
+      if (e.kind === "text") { e.el.nodeValue = s; }
+      else if (e.kind === "title") { e.el.title = s; }
+      else if (e.kind === "value") { e.el.value = s; }
+      else if (e.kind === "option") { e.el.text = s; }
+    }
+    updateSideJointLabel();
+    updateBottomCheckTitle();
+    onSideOverhangFieldsChanged();
+    updateBottomRabbetInfo();
+  }
+
+  function onLanguageChanged(select) {
+    g_lang = select.options[select.selectedIndex].value;
+    applyLanguage();
+  }
+
+  function onColorThemeChanged(select) {
+    var pw = document.getElementById("page-wrapper");
+    if (pw) { pw.className = (select.options[select.selectedIndex].value === "Turquoise") ? "theme-teal" : ""; }
   }
 
   // Applies or removes dark mode by toggling the dark-mode class on body.
@@ -537,12 +771,12 @@
     var end2Height = parseFloat(end2HeightEl.value);
     var parts = [];
     if (isFinite(height) && isFinite(end1Height) && (height - end1Height) > 0.0001) {
-      parts.push("Front " + (height - end1Height).toFixed(2));
+      parts.push(T("Front") + " " + (height - end1Height).toFixed(2));
     }
     if (isFinite(height) && isFinite(end2Height) && (height - end2Height) > 0.0001) {
-      parts.push("Back " + (height - end2Height).toFixed(2));
+      parts.push(T("Back") + " " + (height - end2Height).toFixed(2));
     }
-    out.textContent = parts.length ? ("→ Overhang: " + parts.join(", ")) : "";
+    out.innerHTML = parts.length ? ("&rarr; " + T("Overhang:") + " " + parts.join(", ")) : "";
   }
 
   // Same reasoning as onLidTypeChanged, for the bottom.
@@ -563,11 +797,24 @@
     if (!isFinite(t) || !isFinite(w)) { out.innerHTML = ""; return; }
     var diff = t - w;
     if (diff > 0.0001) {
-      out.innerHTML = "Rabbet depth " + Math.max(0, diff + c).toFixed(2) + " (bottom thickness - groove width + rabbet correction)";
+      out.innerHTML = T("Rabbet depth") + " " + Math.max(0, diff + c).toFixed(2) + " " + T("(bottom thickness - groove width + rabbet correction)");
     } else if (diff > -0.0001) {
-      out.innerHTML = "Bottom thickness equals the groove width - no rabbet needed.";
+      out.innerHTML = T("Bottom thickness equals the groove width - no rabbet needed.");
     } else {
-      out.innerHTML = "Bottom is " + (-diff).toFixed(2) + " thinner than the groove width - no rabbet, it will have that much play in the groove. Reduce the groove width if that is too loose.";
+      out.innerHTML = T("Bottom is") + " " + (-diff).toFixed(2) + " " + T("thinner than the groove width - no rabbet, it will have that much play in the groove. Reduce the groove width if that is too loose.");
+    }
+  }
+
+  // Tooltip of the Bottom checkbox under Faces To Machine depends on the Bottom Type
+  // (and on the dialog language).
+  function updateBottomCheckTitle() {
+    var select = document.getElementById("BottomTypeSelect");
+    var bottomCheckItem = document.getElementById("MakeBottomCheckItem");
+    if (!select || !bottomCheckItem) { return; }
+    if (select.selectedIndex === 4) {
+      bottomCheckItem.title = T("Uncheck to skip cutting the bottom panel while still cutting the slide-in groove into Side 1, Side 2 & End 1 (and still shortening End 2) - useful if you want to slide in your own bottom material instead of the one this gadget would cut.");
+    } else {
+      bottomCheckItem.title = T("Note this stops the bottom from being created, but the dimensions of the rest of the box will be the same. If you want it to be bottomless box select none for bottom type");
     }
   }
 
@@ -597,13 +844,7 @@
     // Side 1, Side 2 & End 1 (and still shortens End 2) - it only skips cutting the
     // bottom panel itself, e.g. when you want to slide in your own material (glass,
     // a different thickness, ...) instead of the one the gadget would cut. -- by Claude 9/18/2026
-    if (bottomCheckItem) {
-      if (selectedIndex === 4) {
-        bottomCheckItem.title = "Uncheck to skip cutting the bottom panel while still cutting the slide-in groove into Side 1, Side 2 & End 1 (and still shortening End 2) - useful if you want to slide in your own bottom material instead of the one this gadget would cut.";
-      } else {
-        bottomCheckItem.title = "Note this stops the bottom from being created, but the dimensions of the rest of the box will be the same. If you want it to be bottomless box select none for bottom type";
-      }
-    }
+    updateBottomCheckTitle();
 
     onGeometryFieldChanged();
   }
@@ -713,11 +954,16 @@
   // share the Side field or get their own changes which fields validation
   // even looks at (see ValidateJointWidths in DisplayDialog.xlua), so this
   // also re-runs validation the same way editing a geometry field does.
+  function updateSideJointLabel() {
+    var checkbox = document.getElementById("AllJointWidths");
+    var elSideJoint = document.getElementById("SideJointLabel");
+    if (checkbox && elSideJoint) { elSideJoint.innerHTML = T(checkbox.checked ? "Side Joints" : "All Joints"); }
+  }
+
   function onShowAllWidthsChanged(checkbox) {
     var el = document.getElementById("showHideTopBottomJoints");
     if (el) { el.style.display = checkbox.checked ? "block" : "none"; }
-	  var elSideJoint = document.getElementById("SideJointLabel")
-	  if (elSideJoint) {elSideJoint.innerHTML=checkbox.checked?"Side Joints":"All Joints"}
+    updateSideJointLabel();
     onGeometryFieldChanged();
   }
 
@@ -766,6 +1012,13 @@
     var zoomSelect = document.getElementById("ZoomLevel");
     var zoomVal = zoomSelect ? zoomSelect.options[zoomSelect.selectedIndex].value : "Auto";
     document.body.style.zoom = (zoomVal === "Auto") ? dpiToZoom() : zoomVal;
+
+    // box-hardi: colour theme + language, restored by Lua like the Zoom Level
+    var themeSelect = document.getElementById("ColorTheme");
+    if (themeSelect) { onColorThemeChanged(themeSelect); }
+    var langSelect = document.getElementById("Language");
+    if (langSelect) { g_lang = langSelect.options[langSelect.selectedIndex].value; }
+    applyLanguage();
 
     // Dark mode: Lua registry restores the checkbox state. If it has never been
     // saved (first run), the checkbox will be unchecked - we default to dark on.

@@ -138,6 +138,8 @@ function main(script_path)
   options.roundover_cut_depth = 0.125      --- cut depth for the finger roundover tool (box joints, no dogbones only)
 
   options.ZoomLevel = "Auto"
+  options.colorTheme = "Blue"               --- box-hardi: dialog colour, Blue or Turquoise -- by Claude 10/9/2026
+  options.language = "English"             --- box-hardi: dialog language, English or Deutsch -- by Claude 10/9/2026
   options.dark_mode     = true        --- default to dark mode on
 
 

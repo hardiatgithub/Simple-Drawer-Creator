@@ -809,6 +809,8 @@ function DisplayDialog(script_path, options, sideDoveTail, bottomDoveTail, lidDo
   dialog:AddCheckBox("LabelFaces", options.label_faces)
 
   dialog:AddDropDownList("ZoomLevel", options.ZoomLevel)
+  dialog:AddDropDownList("ColorTheme", options.colorTheme)   -- box-hardi: Blue / Turquoise -- by Claude 10/9/2026
+  dialog:AddDropDownList("Language", options.language)       -- box-hardi: English / Deutsch -- by Claude 10/9/2026
 
   dialog:AddCheckBox("MakeLid", options.facesToMake.lid)
   dialog:AddCheckBox("MakeBottom", options.facesToMake.bottom)
@@ -1074,6 +1076,8 @@ function ReadOptionsFromDialog(dialog, options, sideDoveTail, bottomDoveTail, li
   options.dark_mode     = dialog:GetCheckBox("DarkMode")
   options.label_faces   = dialog:GetCheckBox("LabelFaces")
   options.ZoomLevel = dialog:GetDropDownListValue("ZoomLevel")
+  options.colorTheme = dialog:GetDropDownListValue("ColorTheme")  -- by Claude 10/9/2026
+  options.language = dialog:GetDropDownListValue("Language")      -- by Claude 10/9/2026
 
   options.no_toolpath  = dialog:GetCheckBox("NoToolpath")
   options.create_dogbones  = dialog:GetCheckBox("CreateDogbones")
@@ -1229,6 +1233,8 @@ function SaveDefaultsToRegistry(options, justwindowinfo)
   registry:SetBool("DarkMode", options.dark_mode)
   registry:SetBool("LabelFaces", options.label_faces)
   registry:SetString("ZoomLevel", options.ZoomLevel)
+  registry:SetString("ColorTheme", options.colorTheme)   -- by Claude 10/9/2026
+  registry:SetString("Language", options.language)       -- by Claude 10/9/2026
 
   if justwindowinfo then
     return
@@ -1339,6 +1345,8 @@ function LoadDefaultsFromRegistry(options, sideDoveTail, bottomDoveTail, lidDove
   options.dark_mode     = registry:GetBool("DarkMode", true)     -- default ON
   options.label_faces   = registry:GetBool("LabelFaces", true)    -- default ON
   options.ZoomLevel = registry:GetString("ZoomLevel", options.ZoomLevel) -- default Auto
+  options.colorTheme = registry:GetString("ColorTheme", options.colorTheme) -- default Blue -- by Claude 10/9/2026
+  options.language = registry:GetString("Language", options.language)       -- default English -- by Claude 10/9/2026
   options.no_toolpath = registry:GetBool("NoToolpath", options.no_toolpath)
   options.create_dogbones = registry:GetBool("CreateDogbones", options.create_dogbones)
   options.useSingleSheet = registry:GetBool("SingleSheetBestEffort", options.useSingleSheet)
