@@ -1347,10 +1347,18 @@ function LoadDefaultsFromRegistry(options, sideDoveTail, bottomDoveTail, lidDove
   options.ZoomLevel = registry:GetString("ZoomLevel", options.ZoomLevel) -- default Auto
   options.colorTheme = registry:GetString("ColorTheme", options.colorTheme) -- default Blue -- by Claude 10/9/2026
   options.language = registry:GetString("Language", options.language)       -- default English -- by Claude 10/9/2026
+  -- A first test version translated the drop-down entries, and VCarve hands Lua the
+  -- visible option text, so German labels may have been saved. Map them back, and
+  -- fall back to the defaults for anything else unknown.        -- by Claude 10/10/2026
+  if options.colorTheme == "Türkis" then options.colorTheme = "Turquoise" end
+  if options.colorTheme ~= "Turquoise" then options.colorTheme = "Blue" end
+  if options.language ~= "Deutsch" then options.language = "English" end
   options.no_toolpath = registry:GetBool("NoToolpath", options.no_toolpath)
   options.create_dogbones = registry:GetBool("CreateDogbones", options.create_dogbones)
   options.useSingleSheet = registry:GetBool("SingleSheetBestEffort", options.useSingleSheet)
   options.partLayout = registry:GetString("PartLayout", options.partLayout)
+  if options.partLayout == "Gedreht" then options.partLayout = "Rotated" end   -- see colorTheme above -- by Claude 10/10/2026
+  if options.partLayout ~= "Normal" and options.partLayout ~= "Rotated" then options.partLayout = "Auto" end
 
   options.facesToMake.lid = registry:GetBool("MakeLid", options.facesToMake.lid)
   options.facesToMake.bottom = registry:GetBool("MakeBottom", options.facesToMake.bottom)

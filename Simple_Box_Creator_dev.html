@@ -454,6 +454,9 @@
   // back and forth; the few texts set from script (hint lines, Side/All Joints label,
   // Bottom checkbox tooltip) go through T(). Plain DOM walking only, so it stays IE7-safe.
   // Messages that come from Lua (message boxes, invalid-field tooltips) stay English.
+  // Drop-down entries are NOT translated: VCarve's GetDropDownListValue hands Lua the
+  // option's visible TEXT, so a German "Eingenutet" would no longer be recognised as
+  // Grooved (and a saved "Türkis" would select nothing on the next start).  -- 10/10/2026
   //                                                                 -- by Claude 10/9/2026
   var g_lang = "English";
   var g_DE = {
@@ -609,11 +612,7 @@
           continue;
         }
         if (tag === "select") {
-          for (var i = 0; i < c.options.length; i++) {
-            var ko = i18nKey(c.options[i].text);
-            if (g_DE[ko]) { g_i18n.push({ kind: "option", el: c.options[i], en: c.options[i].text, key: ko }); }
-          }
-          continue;
+          continue;  // option texts stay English, see above
         }
         collectI18n(c);
       }
@@ -632,7 +631,6 @@
       if (e.kind === "text") { e.el.nodeValue = s; }
       else if (e.kind === "title") { e.el.title = s; }
       else if (e.kind === "value") { e.el.value = s; }
-      else if (e.kind === "option") { e.el.text = s; }
     }
     updateSideJointLabel();
     updateBottomCheckTitle();
@@ -640,14 +638,21 @@
     updateBottomRabbetInfo();
   }
 
+  // Value of the selected option, or "" when nothing is selected (selectedIndex -1,
+  // e.g. Lua restored a value that is not in the list - IE throws on options[-1]).
+  function selectedValue(select) {
+    if (!select || select.selectedIndex < 0 || select.selectedIndex >= select.options.length) { return ""; }
+    return select.options[select.selectedIndex].value;
+  }
+
   function onLanguageChanged(select) {
-    g_lang = select.options[select.selectedIndex].value;
+    g_lang = (selectedValue(select) === "Deutsch") ? "Deutsch" : "English";
     applyLanguage();
   }
 
   function onColorThemeChanged(select) {
     var pw = document.getElementById("page-wrapper");
-    if (pw) { pw.className = (select.options[select.selectedIndex].value === "Turquoise") ? "theme-teal" : ""; }
+    if (pw) { pw.className = (selectedValue(select) === "Turquoise") ? "theme-teal" : ""; }
   }
 
   // Applies or removes dark mode by toggling the dark-mode class on body.
@@ -1017,7 +1022,7 @@
     var themeSelect = document.getElementById("ColorTheme");
     if (themeSelect) { onColorThemeChanged(themeSelect); }
     var langSelect = document.getElementById("Language");
-    if (langSelect) { g_lang = langSelect.options[langSelect.selectedIndex].value; }
+    g_lang = (selectedValue(langSelect) === "Deutsch") ? "Deutsch" : "English";
     applyLanguage();
 
     // Dark mode: Lua registry restores the checkbox state. If it has never been
